@@ -1,0 +1,20 @@
+.header{
+    display: flex;
+    flex-direction: row;
+    width: 100vw;
+    align-items: center;
+    height: 80px;
+    border-bottom: rgba(255, 255, 255, 0.5) 1px solid;
+    padding-left: 25px;
+    padding-right: 25px;
+}
+
+.header__home-button{
+    padding: 0;
+    border: none;
+    background: none;
+    font-weight: 600;
+    font-size: 40px;
+    letter-spacing: -0.02em;
+    color: #fff;
+}
