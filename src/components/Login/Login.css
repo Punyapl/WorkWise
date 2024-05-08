@@ -27,7 +27,12 @@
 }
 
 .login__logo{
-    width: 364px;
+    max-width: 364px;
+}
+@media (max-width: 1280px) {
+    .login__logo{
+        display: none;
+    }
 }
 
 .login__login-window{
@@ -42,6 +47,11 @@
     flex-direction: column;
     align-items: center;
     animation: fade-in 1s ease-in;
+}
+@media (max-width: 1280px) {
+    .login__login-window{
+        margin-top: 0;
+    }
 }
 
 @keyframes fade-in {

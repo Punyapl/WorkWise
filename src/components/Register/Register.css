@@ -27,13 +27,20 @@
 }
 
 .register__logo{
-    width: 364px;
+    max-width: 364px;
+}
+@media (max-width: 1280px) {
+    .register__logo{
+        display: none;
+    }
 }
 
 .register__register-window{
     border-radius: 12px;
-    width: 985px;
-    height: 536px;
+    max-width: 985px;
+    min-height: 536px;
+    width: 100%;
+    height: 100%;
     backdrop-filter: blur(60px);
     background: rgba(255, 255, 255, 0.15);
     border: rgba(255, 255, 255, 0.5) 2px solid;
@@ -42,6 +49,11 @@
     flex-direction: column;
     align-items: center;
     animation: fade-in 1s ease-in;
+}
+@media (max-width: 1280px) {
+    .register__register-window{
+        margin-top: 0;
+    }
 }
 
 @keyframes fade-in {
