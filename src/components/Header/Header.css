@@ -6,7 +6,8 @@
     height: 80px;
     border-bottom: rgba(255, 255, 255, 0.5) 1px solid;
     padding-left: 25px;
-    padding-right: 25px;
+    
+    justify-content: space-between;
 }
 
 .header__home-button{
@@ -17,4 +18,24 @@
     font-size: 40px;
     letter-spacing: -0.02em;
     color: #fff;
+}
+
+.header__buttons-container{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    padding-right: 25px;
+}
+
+.header__link-button{
+    width: 131px;
+    height: 50px;
+    border: none;
+    background: none;
+    font-weight: 300;
+    font-size: 28px;
+    letter-spacing: -0.02em;
+    text-align: center;
+    color: #fff;
+    /* backdrop-filter: blur(57px); */
 }
