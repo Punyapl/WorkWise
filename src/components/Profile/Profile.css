@@ -211,6 +211,7 @@ color: #fff;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
+    /* align-self: center; */
 }
 
 .profile__grad-btn{

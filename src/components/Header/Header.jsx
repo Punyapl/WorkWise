@@ -3,15 +3,18 @@ import { useNavigate } from "react-router-dom";
 
 function Header({ isLoggedIn }) {
     const navigate = useNavigate()
+
+    const token = localStorage.getItem("token")
+
     return (
         <header className="header">
-            <button className="header__home-button" onClick={() => navigate('/')}>WorkWise</button>
+            <button className="header__home-button" onClick={() => navigate(token?'/main' :'/')}>WorkWise</button>
             {
-                isLoggedIn &&
+                token &&
                 <div className="header__buttons-container">
-                    <button className="header__link-button">Профиль</button>
-                    <button className="header__link-button">История</button>
-                    <button className="header__link-button">Выход</button>
+                    <button className="header__link-button" onClick={() => navigate('/profile')}>Профиль</button>
+                    <button className="header__link-button" onClick={() => navigate('/history')}>История</button>
+                    <button className="header__link-button" onClick={() => navigate('/logoff')}>Выход</button>
                 </div>
             }
 

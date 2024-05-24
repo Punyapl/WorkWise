@@ -30,6 +30,7 @@
 .results__diagram-container {
     border-radius: 12px;
     width: 100%;
+    width: 1220px;
     /* height: 673px; */
     backdrop-filter: blur(60px);
     background: rgba(255, 255, 255, 0.15);
@@ -40,8 +41,16 @@
     gap: 45px;
 }
 
+@media (max-width: 1280px) {
+    .results__diagram-container {
+        width: 1140px;
+    }
+}
+
 .results__radar-container {
     width: 525px;
+    width: 100%;
+    height: 100%;
 }
 
 .results__texts-container {

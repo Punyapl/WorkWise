@@ -1,13 +1,61 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Header from '../Header/Header'
 import ApexCharts from 'apexcharts'
 import ReactApexChart from "react-apexcharts";
+import { useParams } from 'react-router-dom';
+import * as api from '../../utils/api.js'
 
 function Results() {
 
+    const param = useParams()
+    const [rawResults, setRawResults] = useState({})
+    const getSpider = () => {
+        api
+            .getSpider(param.id)
+            .then((res) => {
+                setRawResults(res)
+            })
+            .catch((err) => {
+                console.error(err)
+            })
+    }
+
+    useEffect(() => {
+        if (param.id) {
+            getSpider()
+        }
+        
+    },[])
+
+    function extractOTFData(data) {
+        const otfNames = [];
+        const scales = [];
+    
+        if (data && data.OTFs && Array.isArray(data.OTFs)) {
+            data.OTFs.forEach(otf => {
+                otfNames.push(otf.OTF_Name.substring(0, 50)+'...');
+                // Переводим масштаб в проценты (от 0 до 100)
+                scales.push((otf.Scale / 4) * 100);
+            });
+        }
+    
+        // return { otfNames, scales };
+        setOtfNames(otfNames)
+        setScales(scales)
+    }
+    
+    const [otfNames, setOtfNames] = useState([])
+    const [scales, setScales] = useState([])
+
+    useEffect(() => {
+        if (rawResults) {
+            extractOTFData(rawResults)
+        }
+    },[rawResults])
+    console.log(rawResults)
     const series = [{
         name: 'Процент',
-        data: [80, 50, 30, 40, 100, 80, 25, 100, 50, 20],
+        data: scales,
     }]
     const options = {
         chart: {
@@ -15,10 +63,10 @@ function Results() {
             type: 'radar',
         },
         yaxis: {
-            stepSize: 25,
+            stepSize: 10,
         },
         xaxis: {
-            categories: ['Вопрос 1', 'Вопрос 2', 'Вопрос 3', 'Вопрос 4', 'Вопрос 5', 'Вопрос N', 'Вопрос N', 'Вопрос N', 'Вопрос N', 'Вопрос N']
+            categories: otfNames
         },
         fill: {
             colors: ['#71B7F3']
@@ -37,13 +85,13 @@ function Results() {
                 <Header isLoggedIn={true}></Header>
                 <div className="results__main-container">
                     <div className="results__diagram-container">
-                        <h1 className="results__title">Специалист по автоматизации информационно-аналитической деятельности</h1>
+                        <h1 className="results__title">{rawResults.Special_Name}</h1>
                         <div className='results__radar-container'>
-                            <ReactApexChart options={options} series={series} type="radar" height={350}></ReactApexChart>
+                            <ReactApexChart options={options} series={series} type="radar" ></ReactApexChart>
                         </div>
 
                     </div>
-                    <div className="results__texts-container">
+                    {/* <div className="results__texts-container">
                         <div className="results__category-title-container">
                             <div className="results__category-title-line results__category-title-line_V"/>
                             <h2 className="results__category-title">ВЛАДЕЮ</h2>
@@ -101,7 +149,7 @@ function Results() {
                                 ))
                             }
                         </ul>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </div>

@@ -132,6 +132,9 @@
     letter-spacing: -0.02em;
     color: #fff;
 }
+.register__gradient-button:disabled {
+    opacity: 0.5;
+}
 
 .register__separator{
     margin-top: 36px;

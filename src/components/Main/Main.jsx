@@ -1,7 +1,11 @@
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Header from '../Header/Header'
 import separatorLine from "../../images/separatorLine.svg"
 import ProgressBar from "@ramonak/react-progress-bar";
+
+import currentUserContext from '../../contexts/currentUserContext';
+import * as api from "../../utils/api.js"
+import { useNavigate } from 'react-router-dom';
 
 function NewsCard() {
   return (
@@ -15,15 +19,58 @@ function NewsCard() {
   )
 }
 
-function TestCard() {
+function TestCard({ name, id }) {
+  const navigate = useNavigate()
   return (
-    <div className="test-card">
-      Специалист по специальным специолизированным специалистам
+    <div className="test-card" onClick={() => id ? navigate(`/results/${id}`) : null}>
+      {name ? name : "Специалист по специальным специолизированным специалистам"}
     </div>
   )
 }
 
 function Main() {
+  const navigate = useNavigate()
+  const { currentUser, setCurrentUser } = useContext(currentUserContext)
+  const token = localStorage.getItem("token")
+  const [lastResults, setLastResults] = useState({
+    N: 0,
+    H: 0,
+    Z: 0,
+    V: 0
+  })
+  const getLastTestResults = () => {
+    api
+      .getLastTestResults(token)
+      .then((res) => {
+        setLastResults({ N: res.A, H: res.B, Z: res.C, V: res.D })
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+  }
+  console.log(lastResults)
+  useEffect(() => {
+    getLastTestResults()
+  }, [])
+
+
+  const [rawHistory, setRawHistory] = useState([])
+  const getHistory = () => {
+    api
+      .getHistory(token)
+      .then((res) => {
+        setRawHistory(res)
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+  }
+
+  useEffect(() => {
+    getHistory()
+  }, [])
+  console.log(rawHistory)
+
   return (
     <div className='app app_main'>
       <div className="main">
@@ -32,7 +79,7 @@ function Main() {
           <div className="main__profile-info-container main__info-container">
             <img src="https://mygardenia.ru/uploads/pers1.jpg" alt="" className='main__pfp' />
             <img src={separatorLine} alt="" className='main__separator-line' />
-            <p className='main__name'>Борис <br /> Котов</p>
+            <p className='main__name'>{currentUser.Name}</p>
           </div>
           <div className='main__stats-container main__info-container'>
             <p className="main__stats-title">Результат последнего прохождения</p>
@@ -41,7 +88,7 @@ function Main() {
               <div className='main__stats-category-container'>
                 <p className="main__stats-category-title">Не умею</p>
                 <ProgressBar
-                  completed={27}
+                  completed={lastResults.N}
                   bgColor="linear-gradient(169deg, #70f 0%, #ab1e96 100%)"
                   width="490px"
                   labelAlignment="outside"
@@ -53,7 +100,7 @@ function Main() {
               <div className='main__stats-category-container'>
                 <p className="main__stats-category-title">Хочу научиться</p>
                 <ProgressBar
-                  completed={27}
+                  completed={lastResults.H}
                   bgColor="linear-gradient(169deg, #70f 0%, #ab1e96 100%)"
                   width="490px"
                   labelAlignment="outside"
@@ -65,7 +112,7 @@ function Main() {
               <div className='main__stats-category-container'>
                 <p className="main__stats-category-title">Знаю</p>
                 <ProgressBar
-                  completed={27}
+                  completed={lastResults.Z}
                   bgColor="linear-gradient(169deg, #70f 0%, #ab1e96 100%)"
                   width="490px"
                   labelAlignment="outside"
@@ -77,7 +124,7 @@ function Main() {
               <div className='main__stats-category-container'>
                 <p className="main__stats-category-title">Владею</p>
                 <ProgressBar
-                  completed={27}
+                  completed={lastResults.V}
                   bgColor="linear-gradient(169deg, #70f 0%, #ab1e96 100%)"
                   width="490px"
                   labelAlignment="outside"
@@ -108,11 +155,15 @@ function Main() {
 
             <h2 className="main__category-title">Последние пройденные тесты</h2>
             <div className='main__category-container'>
-              <TestCard />
-              <TestCard />
-              <TestCard />
+              {
+                rawHistory.slice(0,4).map((card, index) => (
+                  <div className='history__card-container' key={index}>
+                    <TestCard name={card.Special_Name} id={card.ID_Pass} />
+                  </div>
+                ))
+              }
             </div>
-            <button className='main__start-test-btn'>Начать тестирование</button>
+            <button className='main__start-test-btn' onClick={() => navigate('/select-test')}>Начать тестирование</button>
           </div>
         </div>
       </div>

@@ -7,7 +7,18 @@ import emailIco from "../../images/emailIco.svg"
 import userIco from "../../images/userIco.svg"
 import passwordIco from "../../images/passwordIco.svg"
 
-function Login () {
+function Login ({loginForm, setLoginForm, submitHandler}) {
+    const handleChange = (e) => {
+        const {name, value} = e.target
+        setLoginForm(
+            {...loginForm,
+            [name]: value}
+        )
+    }
+    // console.log(loginForm)
+    const handleSubmit = () => {
+        submitHandler(loginForm.email, loginForm.password)
+    }
     return(
         <div className="app app_login">
             <div className="login">
@@ -18,15 +29,15 @@ function Login () {
                         <h1 className="login__login-window-title">Вход</h1>
                         <form className="login__inputs-container" autoComplete="off">
                             <div className="login__input-container login__input-container_email">
-                                <input type="email" placeholder="Почта" className="login__input"/>
+                                <input type="email" placeholder="Почта" className="login__input" name="email" onChange={(e) => handleChange(e)}/>
                                 <img src={emailIco} alt="" />
                             </div>
                             <div className="login__input-container login__input-container_password">
-                                <input type="password" placeholder="Пароль" className="login__input"/>
+                                <input type="password" placeholder="Пароль" className="login__input" name="password" onChange={(e) => handleChange(e)}/>
                                 <img src={passwordIco} alt="" />
                             </div>
                         </form>
-                        <button className="login__gradient-button">Вход</button>
+                        <button className="login__gradient-button" onClick={() => handleSubmit()}>Вход</button>
                         <div className="login__separator"/>
                         <a className="login__login-text" href="/registration">Нет аккаунта? <span className="login__login-link">Регистрация</span> </a>
                     </div>
