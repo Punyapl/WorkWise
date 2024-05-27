@@ -114,3 +114,17 @@ export const getHistory = (token) => {
     })
         .then((res) => checkServerResponse(res))
 };
+
+export const getAnswersStats = (IDPass) => {
+    return fetch(`${BASE_URL}/get_sorted_answers`, {
+        // mode: "no-cors",
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            "ID_Pass": IDPass
+        }),
+    })
+        .then((res) => checkServerResponse(res))
+};

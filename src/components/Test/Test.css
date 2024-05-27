@@ -57,7 +57,8 @@
 }
 
 .question-card__text{
-
+    max-height: 140px;
+    overflow-y: scroll;
     margin: 0;
     margin-top: 35px;
     font-weight: 500;

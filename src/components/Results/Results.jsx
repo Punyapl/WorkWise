@@ -9,6 +9,7 @@ function Results() {
 
     const param = useParams()
     const [rawResults, setRawResults] = useState({})
+    const [rawAnswers, setRawAnswers] = useState({})
     const getSpider = () => {
         api
             .getSpider(param.id)
@@ -20,30 +21,44 @@ function Results() {
             })
     }
 
+    const getAnswers = () => {
+        api
+            .getAnswersStats(param.id)
+            .then((res) => {
+                setRawAnswers(res)
+            })
+            .catch((err) => {
+                console.error(err)
+            })
+    }
+
     useEffect(() => {
         if (param.id) {
             getSpider()
+            getAnswers()
         }
-        
-    },[])
+
+    }, [])
+
+    console.log(rawAnswers)
 
     function extractOTFData(data) {
         const otfNames = [];
         const scales = [];
-    
+
         if (data && data.OTFs && Array.isArray(data.OTFs)) {
             data.OTFs.forEach(otf => {
-                otfNames.push(otf.OTF_Name.substring(0, 50)+'...');
+                otfNames.push(otf.OTF_Name.substring(0, 50) + '...');
                 // Переводим масштаб в проценты (от 0 до 100)
                 scales.push((otf.Scale / 4) * 100);
             });
         }
-    
+
         // return { otfNames, scales };
         setOtfNames(otfNames)
         setScales(scales)
     }
-    
+
     const [otfNames, setOtfNames] = useState([])
     const [scales, setScales] = useState([])
 
@@ -51,7 +66,7 @@ function Results() {
         if (rawResults) {
             extractOTFData(rawResults)
         }
-    },[rawResults])
+    }, [rawResults])
     console.log(rawResults)
     const series = [{
         name: 'Процент',
@@ -91,65 +106,71 @@ function Results() {
                         </div>
 
                     </div>
-                    {/* <div className="results__texts-container">
-                        <div className="results__category-title-container">
-                            <div className="results__category-title-line results__category-title-line_V"/>
-                            <h2 className="results__category-title">ВЛАДЕЮ</h2>
-                            <div className="results__category-title-line results__category-title-line_V"/>
+                    {
+                        Object.keys(rawAnswers).length !==0 ?
+                        <div className="results__texts-container">
+                            <div className="results__category-title-container">
+                                <div className="results__category-title-line results__category-title-line_V" />
+                                <h2 className="results__category-title">ВЛАДЕЮ</h2>
+                                <div className="results__category-title-line results__category-title-line_V" />
+                            </div>
+
+                            <ul className='results__category-list'>
+                                {
+                                    rawAnswers.one.TD_Names.map((answer) => (
+                                        <li className='results__category-list-element results__category-list-element_V'>
+                                            {answer}
+                                        </li>
+                                    ))
+                                }
+                            </ul>
+                            <div className="results__category-title-container">
+                                <div className="results__category-title-line results__category-title-line_P" />
+                                <h2 className="results__category-title">ПОНИМАЮ</h2>
+                                <div className="results__category-title-line results__category-title-line_P" />
+                            </div>
+                            <ul className='results__category-list'>
+                                {
+                                    rawAnswers.two.TD_Names.map((text) => (
+                                        <li className='results__category-list-element results__category-list-element_P'>
+                                            {text}
+                                        </li>
+                                    ))
+                                }
+                            </ul>
+                            <div className="results__category-title-container">
+                                <div className="results__category-title-line results__category-title-line_H" />
+                                <h2 className="results__category-title">ХОЧУ НАУЧИТЬСЯ</h2>
+                                <div className="results__category-title-line results__category-title-line_H" />
+                            </div>
+                            <ul className='results__category-list'>
+                                {
+                                    rawAnswers.three.TD_Names.map((text) => (
+                                        <li className='results__category-list-element results__category-list-element_H'>
+                                            {text}
+                                        </li>
+                                    ))
+                                }
+                            </ul>
+                            <div className="results__category-title-container">
+                                <div className="results__category-title-line results__category-title-line_N" />
+                                <h2 className="results__category-title">НЕ УМЕЮ</h2>
+                                <div className="results__category-title-line results__category-title-line_N" />
+                            </div>
+                            <ul className='results__category-list'>
+                                {
+                                    rawAnswers.four.TD_Names.map((text) => (
+                                        <li className='results__category-list-element results__category-list-element_N'>
+                                            {text}
+                                        </li>
+                                    ))
+                                }
+                            </ul>
                         </div>
-                        
-                        <ul className='results__category-list'>
-                            {
-                                results.V.map((text) => (
-                                    <li className='results__category-list-element results__category-list-element_V'>
-                                        {text}
-                                    </li>
-                                ))
-                            }
-                        </ul>
-                        <div className="results__category-title-container">
-                            <div className="results__category-title-line results__category-title-line_P"/>
-                            <h2 className="results__category-title">ПОНИМАЮ</h2>
-                            <div className="results__category-title-line results__category-title-line_P"/>
-                        </div>
-                        <ul className='results__category-list'>
-                            {
-                                results.P.map((text) => (
-                                    <li className='results__category-list-element results__category-list-element_P'>
-                                        {text}
-                                    </li>
-                                ))
-                            }
-                        </ul>
-                        <div className="results__category-title-container">
-                            <div className="results__category-title-line results__category-title-line_H"/>
-                            <h2 className="results__category-title">ХОЧУ НАУЧИТЬСЯ</h2>
-                            <div className="results__category-title-line results__category-title-line_H"/>
-                        </div>
-                        <ul className='results__category-list'>
-                            {
-                                results.H.map((text) => (
-                                    <li className='results__category-list-element results__category-list-element_H'>
-                                        {text}
-                                    </li>
-                                ))
-                            }
-                        </ul>
-                        <div className="results__category-title-container">
-                            <div className="results__category-title-line results__category-title-line_N"/>
-                            <h2 className="results__category-title">НЕ УМЕЮ</h2>
-                            <div className="results__category-title-line results__category-title-line_N"/>
-                        </div>
-                        <ul className='results__category-list'>
-                            {
-                                results.N.map((text) => (
-                                    <li className='results__category-list-element results__category-list-element_N'>
-                                        {text}
-                                    </li>
-                                ))
-                            }
-                        </ul>
-                    </div> */}
+                        :
+                        <></>
+                    }
+
                 </div>
             </div>
         </div>

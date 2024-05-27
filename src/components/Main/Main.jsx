@@ -42,7 +42,7 @@ function Main() {
     api
       .getLastTestResults(token)
       .then((res) => {
-        setLastResults({ N: res.A, H: res.B, Z: res.C, V: res.D })
+        setLastResults({ N: Math.round(res.A), H: Math.round(res.B), Z: Math.round(res.C), V: Math.round(res.D) })
       })
       .catch((err) => {
         console.error(err)
