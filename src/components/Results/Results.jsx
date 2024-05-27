@@ -23,7 +23,7 @@ function Results() {
 
     const getAnswers = () => {
         api
-            .getAnswersStats(param.id)
+            .getAnswersStats(Number(param.id))
             .then((res) => {
                 setRawAnswers(res)
             })
@@ -117,7 +117,7 @@ function Results() {
 
                             <ul className='results__category-list'>
                                 {
-                                    rawAnswers.one.TD_Names.map((answer) => (
+                                    rawAnswers.one?.TD_Names.map((answer) => (
                                         <li className='results__category-list-element results__category-list-element_V'>
                                             {answer}
                                         </li>
@@ -131,7 +131,7 @@ function Results() {
                             </div>
                             <ul className='results__category-list'>
                                 {
-                                    rawAnswers.two.TD_Names.map((text) => (
+                                    rawAnswers.two?.TD_Names.map((text) => (
                                         <li className='results__category-list-element results__category-list-element_P'>
                                             {text}
                                         </li>
@@ -145,7 +145,7 @@ function Results() {
                             </div>
                             <ul className='results__category-list'>
                                 {
-                                    rawAnswers.three.TD_Names.map((text) => (
+                                    rawAnswers.three?.TD_Names.map((text) => (
                                         <li className='results__category-list-element results__category-list-element_H'>
                                             {text}
                                         </li>
@@ -159,7 +159,7 @@ function Results() {
                             </div>
                             <ul className='results__category-list'>
                                 {
-                                    rawAnswers.four.TD_Names.map((text) => (
+                                    rawAnswers.four?.TD_Names.map((text) => (
                                         <li className='results__category-list-element results__category-list-element_N'>
                                             {text}
                                         </li>

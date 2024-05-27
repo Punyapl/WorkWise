@@ -5,12 +5,12 @@ import currentUserContext from '../../contexts/currentUserContext';
 import * as api from '../../utils/api.js'
 import { useNavigate } from 'react-router-dom';
 
-function HistoryCard({name, id}) {
+function HistoryCard({name, id, specialId}) {
     const navigate = useNavigate()
     return (
         <div className="history-card">
             <p className="history-card__name" onClick={() => navigate(`/results/${id}`)}>{name}</p>
-            <button className='history-card__start-test-btn' onClick={() => navigate(`/select-test/${id}`)}>Пройти заново</button>
+            <button className='history-card__start-test-btn' onClick={() => navigate(`/select-test/${specialId}`)}>Пройти заново</button>
         </div>
     )
 }
@@ -19,7 +19,7 @@ function History() {
     const {currentUser, setCurrentUser} = useContext(currentUserContext)
     const token = localStorage.getItem("token")
 
-    const cards = [1, 2, 3, 4, 5]
+    // const cards = [1, 2, 3, 4, 5]
     const [rawHistory, setRawHistory] = useState([])
     const getHistory = () => {
         api
@@ -48,7 +48,7 @@ function History() {
                             {
                                 rawHistory.map((card, index) => (
                                     <li className='history__card-container' key={index}>
-                                        <HistoryCard name={card.Special_Name} id={card.ID_Pass}/>
+                                        <HistoryCard name={card.Special_Name} id={card.ID_Pass} specialId={card.Special_ID}/>
                                     </li>
                                 ))
                             }

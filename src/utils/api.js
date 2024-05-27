@@ -128,3 +128,12 @@ export const getAnswersStats = (IDPass) => {
     })
         .then((res) => checkServerResponse(res))
 };
+
+export const getPopularTests = () => {
+    return fetch(`${BASE_URL}/popular_tests`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    }).then((res) => checkServerResponse(res));
+};
